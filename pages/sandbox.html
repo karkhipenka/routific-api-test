@@ -18,16 +18,24 @@
         <div class="row">
           <div class="col-sm-6">
             <div>Source json:</div>
-            <textarea name="sourceJsonTextArea" class="form-control" rows="20">{{sourceJson}}</textarea>
+            <textarea name="sourceJsonTextArea" class="form-control" rows="18">{{sourceJson}}</textarea>
+            <br>        
+            <p><input class="btn btn-primary btn-lg" type="submit" value="Run"></p>
+            <p><a class="btn btn-default btn-lg" href="/" role="button">Back</a></p>            
           </div>
           <div class="col-sm-6">
             <div>Result json:</div>
-            <textarea name="resultJsonTextArea" class="form-control" rows="20">{{resultJson}}</textarea>
+            <textarea name="resultJsonTextArea" class="form-control" rows="18">{{resultJson}}</textarea>
+            <iframe
+            width=100%
+            height="500"
+            frameborder="0" 
+            style="border:0" 
+            src="https://www.google.com/maps/embed/v1/directions?key=AIzaSyCiqWfJTCtdNgpJh9gaGr2MRusc0NdfWeo&origin=49.227107,-123.1163085&destination=49.2474624,-123.153233&waypoints=49.2819229,-123.1211844|49.2553636,-123.0873365" 
+            allowfullscreen>
+          </iframe>                    
           </div>
         </div>
-        <br>
-        <p><input class="btn btn-primary btn-lg" type="submit" value="Run"></p>
-        <p><a class="btn btn-default btn-lg" href="/" role="button">Back</a></p>
       </div>
     </form>
   </div>
