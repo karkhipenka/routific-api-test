@@ -17,6 +17,27 @@ var options = {
   }
 };
 
+//chapter-one-case-one.json'
+
+function RenderResults(req, res, filename) {
+  var data = require(path.join(__dirname + '/data/' + filename));
+  options.json = data;
+  function callback(error, response, body) {
+    if (!error && response.statusCode == 200) {
+      var sourceJson = JSON.stringify(data, null, 4);
+      var resultJson = JSON.stringify(body, null, 4);
+      var caseResult = { sourceJson: sourceJson, resultJson: resultJson };
+      res.render(path.join(__dirname + '/pages/case-result.html'), caseResult);
+    }
+    else {
+      console.log(response.statusCode + ': ' + body.error);
+      var errorResult = { errorCode: response.statusCode, errorMessage: body.error };
+      res.render(path.join(__dirname + '/pages/error.html'), errorResult);      
+    }
+  }
+  request.post(options, callback);
+}
+
 app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname + '/pages/index.html'));
 });
@@ -47,21 +68,12 @@ app.post('/sandbox', function (req, res) {
   request.post(options, callback);
 });
 
+app.get('/quickstart-example', function (req, res) {
+  RenderResults(req, res, 'quickstart-example.json');
+});
+
 app.get('/case-result/one', function (req, res) {
-  var data = require(path.join(__dirname + '/data/chapter-one-case-one.json'));
-  options.json = data;
-  function callback(error, response, body) {
-    if (!error && response.statusCode == 200) {
-      var sourceJson = JSON.stringify(data, null, 4);
-      var resultJson = JSON.stringify(body, null, 4);
-      var caseResult = { sourceJson: sourceJson, resultJson: resultJson };
-      res.render(path.join(__dirname + '/pages/case-result.html'), caseResult);
-    }
-    else {
-      console.log(response.statusCode + ': ' + body.error);
-    }
-  }
-  request.post(options, callback);
+  RenderResults(req, res, 'chapter-one-case-one.json');
 });
 
 app.listen(process.env.PORT || 3000)
