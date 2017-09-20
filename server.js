@@ -10,7 +10,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.engine('html', engines.mustache);
 
 var options = {
-  url: 'https://api.routific.com/v1/vrp',
+  url: '',
   json: {},
   headers: {
     'Authorization': 'bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1OWJmZDRmMmQ5OGI1MGQzMTZkYTI0MTkiLCJpYXQiOjE1MDU3NDQxMTR9.BGDRMCgYTLiUU6LgMkjbY445NNldI0cLVyJ1126Bb5M'
@@ -19,9 +19,17 @@ var options = {
 
 //chapter-one-case-one.json'
 
-function RenderResults(req, res, filename) {
+function getUrl(isVrpEndpoint)
+{
+  return isVrpEndpoint ? 'https://api.routific.com/v1/vrp' : 'https://api.routific.com/v1/pdp';
+}
+
+function RenderResults(req, res, filename, isVrpEndpoint) {
   var data = require(path.join(__dirname + '/data/' + filename));
+
+  options.url = getUrl(isVrpEndpoint);
   options.json = data;
+
   function callback(error, response, body) {
     if (!error && response.statusCode == 200) {
       var sourceJson = JSON.stringify(data, null, 4);
@@ -48,6 +56,10 @@ app.get('/sandbox', function (req, res) {
 });
 
 app.post('/sandbox', function (req, res) {
+  var isVrpEndpoint = req.body.isVrpEndpoint === 'true';
+
+  options.url = getUrl(isVrpEndpoint);
+
   var sourceObject = JSON.parse(req.body.sourceJsonTextArea);
   var sourceJson = JSON.stringify(sourceObject, null, 4);
 
@@ -65,6 +77,7 @@ app.post('/sandbox', function (req, res) {
       res.render(path.join(__dirname + '/pages/error.html'), errorResult);
     }
   }
+  
   request.post(options, callback);
 });
 
