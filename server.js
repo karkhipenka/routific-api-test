@@ -64,6 +64,6 @@ app.get('/case-result/one', function (req, res) {
   request.post(options, callback);
 });
 
-app.listen(3000); 
+app.listen(process.env.PORT || 3000)
 
 console.log("Running at Port 3000");
